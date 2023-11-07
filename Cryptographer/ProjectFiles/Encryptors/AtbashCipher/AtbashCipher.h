@@ -13,4 +13,14 @@ class AtbashCipher : public Encryptor {
 
 		std::string encrypt() override;
 		std::string decrypt() override;
+
+	private:
+		const int ASCII_CODE_OF_UPPERCASE_A = 65;
+		const int ASCII_CODE_OF_UPPERCASE_Z = 90;
+		const int ASCII_CODE_OF_LOWERCASE_A = 97;
+		const int ASCII_CODE_OF_LOWERCASE_Z = 122;
+
+		char encryptCharacter(const char& character) const;
+
+		int getCorrespondingIndexDifference(const char& character) const;
 };
