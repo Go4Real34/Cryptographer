@@ -8,7 +8,7 @@ class Encryptor {
 		virtual ~Encryptor() = default;
 
 		std::string getPlainText() const;
-		int getTextSize() const;
+		size_t getTextSize() const;
 		std::string getEncryptedText() const;
 		std::string getDecryptedText() const;
 
@@ -19,7 +19,7 @@ class Encryptor {
 
 	protected:
 		std::string plainText = "";
-		int textSize = 0;
+		size_t textSize = 0;
 
 		std::string encryptedText = "";
 		std::string decryptedText = "";

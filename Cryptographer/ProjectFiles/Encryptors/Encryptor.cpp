@@ -6,7 +6,7 @@ std::string Encryptor::getPlainText() const {
 	return this -> plainText;
 }
 
-int Encryptor::getTextSize() const {
+size_t Encryptor::getTextSize() const {
 	return this -> textSize;
 }
 
