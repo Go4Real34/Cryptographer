@@ -21,6 +21,7 @@ class AtbashCipher : public Encryptor {
 		const int ASCII_CODE_OF_LOWERCASE_Z = 122;
 
 		char encryptCharacter(const char& character) const;
+		char decryptCharacter(const char& character) const;
 
-		int getCorrespondingIndexDifference(const char& character) const;
+		int getCorrespondingIndexDifference(const char& character, const bool& isEncrypting) const;
 };

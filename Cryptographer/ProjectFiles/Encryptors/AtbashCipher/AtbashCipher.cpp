@@ -38,9 +38,25 @@ std::string AtbashCipher::encrypt() {
 	return encryptedText;
 }
 
+std::string AtbashCipher::decrypt() {
+	std::string decryptedText = "";
+	for (char& character : this -> encryptedText) {
+		if (character == ' ') {
+			decryptedText += character;
+		} else if (isalpha(character)) {
+			decryptedText += decryptCharacter(character);
+		} else {
+			std::cout << "The character " << character << " is not an alphabetic character. Decryption stopped." << std::endl;
+			break;
+		}
+	}
+
+	return decryptedText;
+}
+
 
 char AtbashCipher::encryptCharacter(const char& character) const {
-	const int indexDifference = getCorrespondingIndexDifference(character);
+	const int indexDifference = getCorrespondingIndexDifference(character, true);
 
 	const int asciiCodeOfEncryptedCharacter = (islower(character) ? 
 												this -> ASCII_CODE_OF_LOWERCASE_Z : this -> ASCII_CODE_OF_UPPERCASE_Z) 
@@ -51,12 +67,29 @@ char AtbashCipher::encryptCharacter(const char& character) const {
 	return encryptedCharacter;
 }
 
-int AtbashCipher::getCorrespondingIndexDifference(const char& character) const {
+char AtbashCipher::decryptCharacter(const char& character) const {
+	const int indexDifference = getCorrespondingIndexDifference(character, false);
+
+	const int asciiCodeOfEncryptedCharacter = (islower(character) ? 
+												this -> ASCII_CODE_OF_LOWERCASE_A : ASCII_CODE_OF_UPPERCASE_A) 
+													+ indexDifference;
+
+	char decryptedCharacter = char(asciiCodeOfEncryptedCharacter);
+
+	return decryptedCharacter;
+}
+
+int AtbashCipher::getCorrespondingIndexDifference(const char& character, const bool& isEncrypting) const {
 	const int asciiCodeOfCharacter = int(character);
 
-	const int indexDifference = asciiCodeOfCharacter - 
-									(islower(character) ? 
-										this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
+	const int indexDifference = isEncrypting ? 
+									(asciiCodeOfCharacter - 
+										(islower(character) ? 
+											this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A)) 
+									: 
+									((islower(character) ? 
+										this -> ASCII_CODE_OF_LOWERCASE_Z : this -> ASCII_CODE_OF_UPPERCASE_Z) 
+										- asciiCodeOfCharacter);
 
 	return indexDifference;
 }
