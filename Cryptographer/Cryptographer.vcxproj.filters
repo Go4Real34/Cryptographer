@@ -21,9 +21,15 @@
     <ClCompile Include="ProjectFiles\Encryptors\Encryptor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectFiles\Encryptors\Encryptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
