@@ -48,6 +48,23 @@ std::string CaesarCipher::encrypt() {
 	return encryptedText;
 }
 
+std::string CaesarCipher::decrypt() {
+	std::string decryptedText = "";
+
+	for (const char& character : this -> encryptedText) {
+		if (character == ' ') {
+			decryptedText += character;
+		} else if (isalpha(character)) {
+			decryptedText += decryptCharacter(character);
+		} else {
+			std::cout << "The character " << character << " is not an alphabetic character. Decryption stopped." << std::endl;
+			break;
+		}
+	}
+	
+	return decryptedText;
+}
+
 
 char CaesarCipher::encryptCharacter(const char& character) const {
 	uint8_t asciiValueOfCharacter = uint8_t(character);
@@ -62,4 +79,19 @@ char CaesarCipher::encryptCharacter(const char& character) const {
 
 	char encryptedCharacter = char(asciiCodeOfEncryptedCharacter);
 	return encryptedCharacter;
+}
+
+char CaesarCipher::decryptCharacter(const char& character) const {
+	uint8_t asciiValueOfCharacter = uint8_t(character);
+
+	uint8_t asciiCodeOfDecryptedCharacter = asciiValueOfCharacter - this -> shiftAmount;
+	asciiCodeOfDecryptedCharacter = islower(character) ? 
+										(asciiCodeOfDecryptedCharacter < this -> ASCII_CODE_OF_LOWERCASE_A ? 
+											asciiCodeOfDecryptedCharacter + this -> englishAlphabetSize : asciiCodeOfDecryptedCharacter) 
+									:
+									(asciiCodeOfDecryptedCharacter < this -> ASCII_CODE_OF_UPPERCASE_A ? 
+										asciiCodeOfDecryptedCharacter + this -> englishAlphabetSize : asciiCodeOfDecryptedCharacter);
+
+	char decryptedCharacter = char(asciiCodeOfDecryptedCharacter);
+	return decryptedCharacter;
 }
