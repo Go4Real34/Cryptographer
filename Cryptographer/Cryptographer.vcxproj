@@ -129,10 +129,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.cpp" />
+    <ClCompile Include="ProjectFiles\Encryptors\CaesarCipher\CaesarCipher.cpp" />
     <ClCompile Include="ProjectFiles\Encryptors\Encryptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.h" />
+    <ClInclude Include="ProjectFiles\Encryptors\CaesarCipher\CaesarCipher.h" />
     <ClInclude Include="ProjectFiles\Encryptors\Encryptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
