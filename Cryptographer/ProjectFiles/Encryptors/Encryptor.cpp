@@ -1,5 +1,3 @@
-#include <string>
-
 #include "Encryptor.h"
 
 std::string Encryptor::getPlainText() const {

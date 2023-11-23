@@ -23,4 +23,7 @@ class Encryptor {
 
 		std::string encryptedText = "";
 		std::string decryptedText = "";
+
+		virtual char encryptCharacter(const char& character) const = 0;
+		virtual char decryptCharacter(const char& character) const = 0;
 };

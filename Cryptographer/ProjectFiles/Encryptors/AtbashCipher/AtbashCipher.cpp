@@ -1,6 +1,5 @@
-#include <string>
-#include <cctype>
 #include <iostream>
+#include <cctype>
 
 #include "AtbashCipher.h"
 
@@ -57,11 +56,11 @@ std::string AtbashCipher::decrypt() {
 
 
 char AtbashCipher::encryptCharacter(const char& character) const {
-	const int indexDifference = getCorrespondingIndexDifference(character, true);
+	const uint8_t indexDifference = getCorrespondingIndexDifference(character, true);
 
-	const int asciiCodeOfEncryptedCharacter = (islower(character) ? 
-												this -> ASCII_CODE_OF_LOWERCASE_Z : this -> ASCII_CODE_OF_UPPERCASE_Z) 
-													- indexDifference;
+	const uint8_t asciiCodeOfEncryptedCharacter = (islower(character) ? 
+													this -> ASCII_CODE_OF_LOWERCASE_Z : this -> ASCII_CODE_OF_UPPERCASE_Z) 
+														- indexDifference;
 
 	char encryptedCharacter = char(asciiCodeOfEncryptedCharacter);
 
@@ -69,28 +68,28 @@ char AtbashCipher::encryptCharacter(const char& character) const {
 }
 
 char AtbashCipher::decryptCharacter(const char& character) const {
-	const int indexDifference = getCorrespondingIndexDifference(character, false);
+	const uint8_t indexDifference = getCorrespondingIndexDifference(character, false);
 
-	const int asciiCodeOfEncryptedCharacter = (islower(character) ? 
-												this -> ASCII_CODE_OF_LOWERCASE_A : ASCII_CODE_OF_UPPERCASE_A) 
-													+ indexDifference;
+	const uint8_t asciiCodeOfEncryptedCharacter = (islower(character) ? 
+													this -> ASCII_CODE_OF_LOWERCASE_A : ASCII_CODE_OF_UPPERCASE_A) 
+														+ indexDifference;
 
 	char decryptedCharacter = char(asciiCodeOfEncryptedCharacter);
 
 	return decryptedCharacter;
 }
 
-int AtbashCipher::getCorrespondingIndexDifference(const char& character, const bool& isEncrypting) const {
-	const int asciiCodeOfCharacter = int(character);
+uint8_t AtbashCipher::getCorrespondingIndexDifference(const char& character, const bool& isEncrypting) const {
+	const int asciiCodeOfCharacter = uint8_t(character);
 
-	const int indexDifference = isEncrypting ? 
-									(asciiCodeOfCharacter - 
-										(islower(character) ? 
-											this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A)) 
+	const uint8_t indexDifference = isEncrypting ? 
+										(asciiCodeOfCharacter - 
+											(islower(character) ? 
+												this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A)) 
 									: 
 									((islower(character) ? 
 										this -> ASCII_CODE_OF_LOWERCASE_Z : this -> ASCII_CODE_OF_UPPERCASE_Z) 
-										- asciiCodeOfCharacter);
+											- asciiCodeOfCharacter);
 
 	return indexDifference;
 }
