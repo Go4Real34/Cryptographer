@@ -18,6 +18,7 @@ AtbashCipher::~AtbashCipher() {
 void AtbashCipher::setPlainText(const std::string& newPlainText) {
 	this -> plainText = newPlainText;
 	this -> textSize = newPlainText.size();
+
 	this -> encryptedText = encrypt();
 	this -> decryptedText = decrypt();
 }
