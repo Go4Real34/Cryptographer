@@ -3,11 +3,11 @@
 
 #include "CaesarCipher.h"
 
-CaesarCipher::CaesarCipher(const std::string& PlainText, uint8_t ShiftAmount) {
+CaesarCipher::CaesarCipher(const std::string& PlainText, long long& ShiftAmount) {
 	this -> plainText = PlainText;
 	this -> textSize = PlainText.size();
 
-	this -> shiftAmount = ShiftAmount % this -> englishAlphabetSize;
+	this -> shiftAmount = modulus(ShiftAmount, this -> englishAlphabetSize);
 
 	this -> encryptedText = encrypt();
 	this -> decryptedText = decrypt();
@@ -25,7 +25,7 @@ void CaesarCipher::setPlainText(const std::string& newPlainText) {
 }
 
 void CaesarCipher::setShiftAmount(uint8_t newShiftAmount) {
-	this -> shiftAmount = newShiftAmount;
+	this -> shiftAmount = modulus(newShiftAmount, this -> englishAlphabetSize);
 
 	this -> encryptedText = encrypt();
 	this -> decryptedText = decrypt();
@@ -94,4 +94,8 @@ char CaesarCipher::decryptCharacter(const char& character) const {
 
 	char decryptedCharacter = char(asciiCodeOfDecryptedCharacter);
 	return decryptedCharacter;
+}
+
+uint8_t CaesarCipher::modulus(const long long& dividend, const uint8_t& divisor) const {
+	return ((dividend % divisor) + divisor) % divisor;
 }

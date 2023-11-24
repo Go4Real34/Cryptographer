@@ -49,6 +49,39 @@ void AffineCipher::setBeta(const long long& newBeta) {
 	this -> decryptedText = this -> decrypt();
 }
 
+std::string AffineCipher::encrypt() {
+	std::string encryptedText = "";
+
+	for (const char& character : this -> plainText) {
+		if (character == ' ') {
+			encryptedText += character;
+		} else if (isalpha(character)) {
+			encryptedText += encryptCharacter(character);
+		} else {
+			std::cout << "The character " << character << " is not an alphabetic character. Encryption stopped." << std::endl;
+		}
+	}
+
+	return encryptedText;
+}
+
+
+char AffineCipher::encryptCharacter(const char& character) const {
+	uint8_t asciiCodeOfCharacter = uint8_t(character);
+	
+	uint8_t offsetFromLetterA = asciiCodeOfCharacter - 
+									(islower(character) ? 
+										this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
+	
+	long long shiftAmount = modulus((this -> alpha * offsetFromLetterA + this -> beta), this -> englishAlphabetSize);
+	
+	uint8_t asciiCodeOfEncryptedCharacter = (islower(character) ? 
+												this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A) 
+													+ shiftAmount;
+	
+	char encryptedCharacter = char(asciiCodeOfEncryptedCharacter);
+	return encryptedCharacter;
+}
 
 bool AffineCipher::areNumbersCoprime(const long long& value1, const long long& value2) const {
 	return calculateGreatestCommonDivisor(value1, value2) == 1;

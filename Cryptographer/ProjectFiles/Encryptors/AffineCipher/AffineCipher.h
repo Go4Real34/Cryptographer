@@ -20,6 +20,9 @@ class AffineCipher : public Encryptor {
 
 		uint8_t englishAlphabetSize = 26;
 
+		const uint8_t ASCII_CODE_OF_UPPERCASE_A = 65;
+		const uint8_t ASCII_CODE_OF_LOWERCASE_A = 97;
+
 		char encryptCharacter(const char& character) const override;
 		char decryptCharacter(const char& character) const override;
 

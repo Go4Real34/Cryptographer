@@ -4,7 +4,7 @@
 
 class CaesarCipher : public Encryptor {
 	public:
-		CaesarCipher(const std::string& PlainText, uint8_t ShiftAmount);
+		CaesarCipher(const std::string& PlainText, long long& ShiftAmount);
 		~CaesarCipher();
 
 		void setPlainText(const std::string& newPlainText) override;
@@ -24,4 +24,6 @@ class CaesarCipher : public Encryptor {
 
 		char encryptCharacter(const char& character) const override;
 		char decryptCharacter(const char& character) const override;
+
+		uint8_t modulus(const long long& dividend, const uint8_t& divisor) const;
 };

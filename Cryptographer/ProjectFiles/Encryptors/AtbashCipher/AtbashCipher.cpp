@@ -63,7 +63,6 @@ char AtbashCipher::encryptCharacter(const char& character) const {
 														- indexDifference;
 
 	char encryptedCharacter = char(asciiCodeOfEncryptedCharacter);
-
 	return encryptedCharacter;
 }
 
@@ -75,7 +74,6 @@ char AtbashCipher::decryptCharacter(const char& character) const {
 														+ indexDifference;
 
 	char decryptedCharacter = char(asciiCodeOfEncryptedCharacter);
-
 	return decryptedCharacter;
 }
 
