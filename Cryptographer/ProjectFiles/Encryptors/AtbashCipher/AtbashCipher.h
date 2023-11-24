@@ -18,8 +18,8 @@ class AtbashCipher : public Encryptor {
 		const uint8_t ASCII_CODE_OF_LOWERCASE_A = 97;
 		const uint8_t ASCII_CODE_OF_LOWERCASE_Z = 122;
 
-		char encryptCharacter(const char& character) const override;
-		char decryptCharacter(const char& character) const override;
+		char encryptCharacter(const char& character) override;
+		char decryptCharacter(const char& character) override;
 
 		uint8_t getCorrespondingIndexDifference(const char& character, const bool& isEncrypting) const;
 };
