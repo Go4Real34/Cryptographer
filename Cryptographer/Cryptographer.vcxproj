@@ -128,11 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ProjectFiles\Encryptors\AffineCipher\AffineCipher.cpp" />
     <ClCompile Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.cpp" />
     <ClCompile Include="ProjectFiles\Encryptors\CaesarCipher\CaesarCipher.cpp" />
     <ClCompile Include="ProjectFiles\Encryptors\Encryptor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ProjectFiles\Encryptors\AffineCipher\AffineCipher.h" />
     <ClInclude Include="ProjectFiles\Encryptors\AtbashCipher\AtbashCipher.h" />
     <ClInclude Include="ProjectFiles\Encryptors\CaesarCipher\CaesarCipher.h" />
     <ClInclude Include="ProjectFiles\Encryptors\Encryptor.h" />
