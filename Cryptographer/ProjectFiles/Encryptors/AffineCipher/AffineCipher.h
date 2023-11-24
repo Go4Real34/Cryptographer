@@ -18,6 +18,12 @@ class AffineCipher : public Encryptor {
 		long long alpha = 1;
 		long long beta = 0;
 
+		uint8_t englishAlphabetSize = 26;
+
 		char encryptCharacter(const char& character) const override;
 		char decryptCharacter(const char& character) const override;
+
+		bool areNumbersCoprime(const long long& value1, const long long& value2) const;
+		long long calculateGreatestCommonDivisor(const long long& dividend, const long long& divisor) const;
+		long long modulus(const long long& divisor, const long long& dividend) const;
 };
