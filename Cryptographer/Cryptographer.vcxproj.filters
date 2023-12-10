@@ -30,6 +30,9 @@
     <ClCompile Include="ProjectFiles\Encryptors\AffineCipher\AffineCipher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectFiles\Encryptors\VigenereCipher\VigenereCipher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectFiles\Encryptors\Encryptor.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProjectFiles\Encryptors\AffineCipher\AffineCipher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectFiles\Encryptors\VigenereCipher\VigenereCipher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
