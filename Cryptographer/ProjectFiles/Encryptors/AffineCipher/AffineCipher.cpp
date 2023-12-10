@@ -8,6 +8,7 @@ AffineCipher::AffineCipher(const std::string& PlainText, const long long& Alpha,
 		std::cout << "The alpha value " << Alpha << " is less than 1. Encryption stopped." << std::endl;
 	} else if (this -> areNumbersCoprime(Alpha, this -> englishAlphabetSize)) {
 		this -> plainText = PlainText;
+		this -> textSize = PlainText.size();
 
 		this -> alpha = Alpha;
 		this -> beta = this -> modulus(Beta, this -> englishAlphabetSize);
@@ -24,6 +25,7 @@ AffineCipher::~AffineCipher() {
 
 void AffineCipher::setPlainText(const std::string& newPlainText) {
 	this -> plainText = newPlainText;
+	this -> textSize = newPlainText.size();
 
 	this -> encryptedText = this -> encrypt();
 	this -> decryptedText = this -> decrypt();
@@ -84,7 +86,7 @@ std::string AffineCipher::decrypt() {
 }
 
 
-char AffineCipher::encryptCharacter(const char& character) {
+char AffineCipher::encryptCharacter(const char& character) const {
 	const uint8_t asciiCodeOfCharacter = uint8_t(character);
 	
 	const uint8_t offsetFromLetterA = asciiCodeOfCharacter - 
@@ -101,7 +103,7 @@ char AffineCipher::encryptCharacter(const char& character) {
 	return encryptedCharacter;
 }
 
-char AffineCipher::decryptCharacter(const char& character) {
+char AffineCipher::decryptCharacter(const char& character) const {
 	const uint8_t asciiCodeOfCharacter = uint8_t(character);
 	
 	const uint8_t offsetFromLetterA = asciiCodeOfCharacter - 

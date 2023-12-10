@@ -55,7 +55,7 @@ std::string AtbashCipher::decrypt() {
 }
 
 
-char AtbashCipher::encryptCharacter(const char& character) {
+char AtbashCipher::encryptCharacter(const char& character) const {
 	const uint8_t indexDifference = this -> getCorrespondingIndexDifference(character, true);
 
 	const uint8_t asciiCodeOfEncryptedCharacter = (islower(character) ? 
@@ -66,7 +66,7 @@ char AtbashCipher::encryptCharacter(const char& character) {
 	return encryptedCharacter;
 }
 
-char AtbashCipher::decryptCharacter(const char& character) {
+char AtbashCipher::decryptCharacter(const char& character) const {
 	const uint8_t indexDifference = this -> getCorrespondingIndexDifference(character, false);
 
 	const uint8_t asciiCodeOfDecryptedCharacter = (islower(character) ? 

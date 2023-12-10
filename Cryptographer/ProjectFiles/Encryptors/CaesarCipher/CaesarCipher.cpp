@@ -66,7 +66,7 @@ std::string CaesarCipher::decrypt() {
 }
 
 
-char CaesarCipher::encryptCharacter(const char& character) {
+char CaesarCipher::encryptCharacter(const char& character) const {
 	const uint8_t asciiValueOfCharacter = uint8_t(character);
 	
 	const uint8_t asciiCodeOfShiftedEncryptedCharacter = asciiValueOfCharacter + this -> shiftAmount;
@@ -81,7 +81,7 @@ char CaesarCipher::encryptCharacter(const char& character) {
 	return encryptedCharacter;
 }
 
-char CaesarCipher::decryptCharacter(const char& character) {
+char CaesarCipher::decryptCharacter(const char& character) const {
 	const uint8_t asciiValueOfCharacter = uint8_t(character);
 
 	const uint8_t asciiCodeOfShiftedDecryptedCharacter = asciiValueOfCharacter - this -> shiftAmount;
