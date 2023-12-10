@@ -87,45 +87,45 @@ std::string AffineCipher::decrypt() {
 
 
 char AffineCipher::encryptCharacter(const char& character) const {
-	const uint8_t asciiCodeOfCharacter = uint8_t(character);
+	const int8_t asciiCodeOfCharacter = int8_t(character);
 	
-	const uint8_t offsetFromLetterA = asciiCodeOfCharacter - 
+	const int8_t offsetFromLetterA = asciiCodeOfCharacter - 
 										(islower(character) ? 
 											this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
 	
-	const uint8_t shiftAmount = this -> modulus((this -> alpha * offsetFromLetterA + this -> beta), this -> englishAlphabetSize);
+	const int8_t shiftAmount = this -> modulus((this -> alpha * offsetFromLetterA + this -> beta), this -> englishAlphabetSize);
 	
-	const uint8_t asciiCodeOfEncryptedCharacter = ((islower(character) ? 
-														this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A) 
-															+ shiftAmount);
+	const int8_t asciiCodeOfEncryptedCharacter = ((islower(character) ? 
+													this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A) 
+														+ shiftAmount);
 	
 	const char encryptedCharacter = char((asciiCodeOfEncryptedCharacter));
 	return encryptedCharacter;
 }
 
 char AffineCipher::decryptCharacter(const char& character) const {
-	const uint8_t asciiCodeOfCharacter = uint8_t(character);
+	const int8_t asciiCodeOfCharacter = int8_t(character);
 	
-	const uint8_t offsetFromLetterA = asciiCodeOfCharacter - 
+	const int8_t offsetFromLetterA = asciiCodeOfCharacter - 
 										(islower(character) ? 
 											this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
 
-	const uint8_t shiftAmount = this -> modulus(this -> inverseOfAlpha * (offsetFromLetterA - this -> beta), this -> englishAlphabetSize);
+	const int8_t shiftAmount = this -> modulus(this -> inverseOfAlpha * (offsetFromLetterA - this -> beta), this -> englishAlphabetSize);
 
-	const uint8_t asciiCodeOfDecryptedCharacter = (islower(character) ? 
-														this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A) 
-															+ shiftAmount;
+	const int8_t asciiCodeOfDecryptedCharacter = (islower(character) ? 
+													this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A) 
+														+ shiftAmount;
 
 	const char decryptedCharacter = char(asciiCodeOfDecryptedCharacter);
 	return decryptedCharacter;
 }
 
 
-bool AffineCipher::areNumbersCoprime(const long long& value1, const uint8_t& value2) const {
+bool AffineCipher::areNumbersCoprime(const long long& value1, const int8_t& value2) const {
 	return this -> calculateGreatestCommonDivisor(value1, value2) == 1;
 }
 
-long long AffineCipher::calculateGreatestCommonDivisor(const long long& dividend, const uint8_t& divisor) const {
+long long AffineCipher::calculateGreatestCommonDivisor(const long long& dividend, const int8_t& divisor) const {
 	if (divisor == 0) {
 		return dividend;
 	}
@@ -133,11 +133,11 @@ long long AffineCipher::calculateGreatestCommonDivisor(const long long& dividend
 	return this -> calculateGreatestCommonDivisor(divisor, this -> modulus(dividend, divisor));
 }
 
-uint8_t AffineCipher::modulus(const long long& dividend, const uint8_t& divisor) const {
+int8_t AffineCipher::modulus(const long long& dividend, const int8_t& divisor) const {
 	return ((dividend % divisor) + divisor) % divisor;
 }
 
-long long AffineCipher::calculateInverseOfAlpha(const long long& alphaToInverse, const uint8_t& modularBase) const {
+long long AffineCipher::calculateInverseOfAlpha(const long long& alphaToInverse, const int8_t& modularBase) const {
 	for (long long inverse = 0; inverse < modularBase; inverse++) {
 		if (this -> modulus(alphaToInverse * inverse, modularBase) == 1) {
 			return inverse;

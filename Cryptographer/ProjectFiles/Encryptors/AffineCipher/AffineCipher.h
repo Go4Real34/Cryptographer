@@ -20,17 +20,17 @@ class AffineCipher : public Encryptor {
 
 		long long inverseOfAlpha = 1;
 
-		uint8_t englishAlphabetSize = 26;
+		int8_t englishAlphabetSize = 26;
 
-		const uint8_t ASCII_CODE_OF_UPPERCASE_A = 65;
-		const uint8_t ASCII_CODE_OF_LOWERCASE_A = 97;
+		const int8_t ASCII_CODE_OF_UPPERCASE_A = 65;
+		const int8_t ASCII_CODE_OF_LOWERCASE_A = 97;
 
 		char encryptCharacter(const char& character) const;
 		char decryptCharacter(const char& character) const;
 
-		bool areNumbersCoprime(const long long& value1, const uint8_t& value2) const;
-		long long calculateGreatestCommonDivisor(const long long& dividend, const uint8_t& divisor) const;
-		uint8_t modulus(const long long& divisor, const uint8_t& dividend) const;
+		bool areNumbersCoprime(const long long& value1, const int8_t& value2) const;
+		long long calculateGreatestCommonDivisor(const long long& dividend, const int8_t& divisor) const;
+		int8_t modulus(const long long& divisor, const int8_t& dividend) const;
 
-		long long calculateInverseOfAlpha(const long long& alphaToInverse, const uint8_t& modularBase) const;
+		long long calculateInverseOfAlpha(const long long& alphaToInverse, const int8_t& modularBase) const;
 };

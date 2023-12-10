@@ -24,7 +24,7 @@ void CaesarCipher::setPlainText(const std::string& newPlainText) {
 	this -> decryptedText = this -> decrypt();
 }
 
-void CaesarCipher::setShiftAmount(uint8_t newShiftAmount) {
+void CaesarCipher::setShiftAmount(int8_t newShiftAmount) {
 	this -> shiftAmount = this -> modulus(newShiftAmount, this -> englishAlphabetSize);
 
 	this -> encryptedText = this -> encrypt();
@@ -67,10 +67,10 @@ std::string CaesarCipher::decrypt() {
 
 
 char CaesarCipher::encryptCharacter(const char& character) const {
-	const uint8_t asciiValueOfCharacter = uint8_t(character);
+	const int8_t asciiValueOfCharacter = int8_t(character);
 	
-	const uint8_t asciiCodeOfShiftedEncryptedCharacter = asciiValueOfCharacter + this -> shiftAmount;
-	const uint8_t  asciiCodeOfEncryptedCharacter = islower(character) ?
+	const int8_t asciiCodeOfShiftedEncryptedCharacter = asciiValueOfCharacter + this -> shiftAmount;
+	const int8_t  asciiCodeOfEncryptedCharacter = islower(character) ?
 													(asciiCodeOfShiftedEncryptedCharacter > this -> ASCII_CODE_OF_LOWERCASE_Z ?
 														asciiCodeOfShiftedEncryptedCharacter - this -> englishAlphabetSize : asciiCodeOfShiftedEncryptedCharacter) 
 													:
@@ -82,10 +82,10 @@ char CaesarCipher::encryptCharacter(const char& character) const {
 }
 
 char CaesarCipher::decryptCharacter(const char& character) const {
-	const uint8_t asciiValueOfCharacter = uint8_t(character);
+	const int8_t asciiValueOfCharacter = int8_t(character);
 
-	const uint8_t asciiCodeOfShiftedDecryptedCharacter = asciiValueOfCharacter - this -> shiftAmount;
-	const uint8_t asciiCodeOfDecryptedCharacter = islower(character) ? 
+	const int8_t asciiCodeOfShiftedDecryptedCharacter = asciiValueOfCharacter - this -> shiftAmount;
+	const int8_t asciiCodeOfDecryptedCharacter = islower(character) ? 
 													(asciiCodeOfShiftedDecryptedCharacter < this -> ASCII_CODE_OF_LOWERCASE_A ? 
 														asciiCodeOfShiftedDecryptedCharacter + this -> englishAlphabetSize : asciiCodeOfShiftedDecryptedCharacter) 
 													:
@@ -96,6 +96,6 @@ char CaesarCipher::decryptCharacter(const char& character) const {
 	return decryptedCharacter;
 }
 
-uint8_t CaesarCipher::modulus(const long long& dividend, const uint8_t& divisor) const {
+int8_t CaesarCipher::modulus(const long long& dividend, const int8_t& divisor) const {
 	return ((dividend % divisor) + divisor) % divisor;
 }
