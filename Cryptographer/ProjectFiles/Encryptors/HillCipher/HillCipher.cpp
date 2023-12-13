@@ -120,7 +120,7 @@ std::string HillCipher::encrypt() {
 		return "";
 	}
 
-	this -> encryptedTextMatrix = multiplyMatrices(this -> keyMatrix, this -> plainTextMatrix);
+	this -> encryptedTextMatrix = multiplyMatrices<int8_t, int8_t>(this -> keyMatrix, this -> plainTextMatrix, this -> englishAlphabetSize);
 	const size_t encryptedTextMatrixRowSize = this -> encryptedTextMatrix.size();
 	const size_t encryptedTextMatrixColumnSize = this -> encryptedTextMatrix[0].size();
 	std::string matrixText = "";
@@ -149,6 +149,49 @@ std::string HillCipher::encrypt() {
 	}
 
 	return encryptedText;
+}
+
+std::string HillCipher::decrypt() {
+	if (this -> keySize == 0) {
+		std::cout << "The encryption key is empty. Decryption stopped." << std::endl;
+		return "";
+	}
+
+	this -> inverseKeyMatrix = this -> calculateMatrixInverseWithGaussJordanElimination(this -> keyMatrix);
+	if (this -> inverseKeyMatrix.size() == 0) {
+		std::cout << "The encryption key is not able to create a matrix that is invertible so, it is not valid. Decryption stopped." << std::endl;
+		return "";
+	}
+
+	this -> decryptedTextMatrix = multiplyMatrices<long double, int8_t>(this -> inverseKeyMatrix, this -> encryptedTextMatrix, this -> englishAlphabetSize);
+	const size_t decryptedTextMatrixRowSize = this -> decryptedTextMatrix.size();
+	const size_t decryptedTextMatrixColumnSize = this -> decryptedTextMatrix[0].size();
+	std::string matrixText = "";
+
+	for (size_t column = 0; column < decryptedTextMatrixColumnSize; column++) {
+		for (size_t row = 0; row < decryptedTextMatrixRowSize; row++) {
+			const int8_t numericalValueOfCharacter = this -> decryptedTextMatrix[row][column];
+			const bool isCharacterLower = this -> plainTextIsLowerMatrix[row][column];
+			
+			const int8_t asciiCodeOfCharacter = numericalValueOfCharacter + (isCharacterLower ? this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
+			const char character = char(asciiCodeOfCharacter);
+			matrixText += character;
+		}
+	}
+
+	std::string decryptedText = "";
+	int64_t spaceCount = 0;
+	for (size_t matrixTextIndex = 0, spaceIndex = 0; matrixTextIndex < matrixText.size() + this -> spaceIndexes.size(); matrixTextIndex++) {
+		if (spaceIndex < this -> spaceIndexes.size() && matrixTextIndex == this -> spaceIndexes[spaceIndex] + spaceCount) {
+			decryptedText += ' ';
+			spaceCount++;
+			spaceIndex++;
+		} else {
+			decryptedText += matrixText[matrixTextIndex - spaceCount];
+		}
+	}
+
+	return decryptedText;
 }
 
 
@@ -261,21 +304,88 @@ int64_t HillCipher::getDeterminantOfMatrix(std::vector<std::vector<int8_t>>& mat
     return determinant;
 }
 
-std::vector<std::vector<int8_t>> HillCipher::multiplyMatrices(std::vector<std::vector<int8_t>>& matrix1, std::vector<std::vector<int8_t>>& matrix2) const {
+template<typename TParameter, typename TResult>
+std::vector<std::vector<TResult>> HillCipher::multiplyMatrices(std::vector<std::vector<TParameter>>& matrix1, std::vector<std::vector<int8_t>>& matrix2, const TResult& divisor) const {
 	const size_t matrix1RowCount = matrix1.size();
 	const size_t matrix1ColumnCount = matrix1[0].size();
 	const size_t matrix2ColumnCount = matrix2[0].size();
 
-	std::vector<std::vector<int8_t>> resultMatrix(matrix1RowCount, std::vector<int8_t>(matrix2ColumnCount, 0));
+	std::vector<std::vector<TResult>> resultMatrix(matrix1RowCount, std::vector<int8_t>(matrix2ColumnCount, 0));
 
 	for (size_t firstMatrixRow = 0; firstMatrixRow < matrix1RowCount; firstMatrixRow++) {
 		for (size_t secondMatrixColumn = 0; secondMatrixColumn < matrix2ColumnCount; secondMatrixColumn++) {
+			TResult currentSum = 0;
 			for (size_t firstMatrixColumn = 0; firstMatrixColumn < matrix1ColumnCount; firstMatrixColumn++) {
-				resultMatrix[firstMatrixRow][secondMatrixColumn] += (matrix1[firstMatrixRow][firstMatrixColumn] * matrix2[firstMatrixColumn][secondMatrixColumn]) % this -> englishAlphabetSize;
+				if constexpr (std::is_integral<TResult>::value) {
+					currentSum += int8_t(this -> modulus(matrix1[firstMatrixRow][firstMatrixColumn] * matrix2[firstMatrixColumn][secondMatrixColumn], divisor));
+				}
 			}
-			resultMatrix[firstMatrixRow][secondMatrixColumn] %= this -> englishAlphabetSize;
+
+			if constexpr (std::is_integral<TResult>::value) {
+				currentSum = this -> modulus(currentSum, divisor);
+			}
+
+			resultMatrix[firstMatrixRow][secondMatrixColumn] = int8_t(std::round(currentSum));
 		}
 	}
 
 	return resultMatrix;
+}
+
+std::vector<std::vector<long double>> HillCipher::calculateMatrixInverseWithGaussJordanElimination(std::vector<std::vector<int8_t>>& matrix) const {
+	size_t matrixSize = matrix.size();
+
+	std::vector<std::vector<long double>> inverseMatrix(matrixSize, std::vector<long double>(matrixSize, 0));
+	for (size_t index = 0; index < matrixSize; index++) {
+		inverseMatrix[index][index] = 1;
+	}
+
+	std::vector<std::vector<double>> temporaryOperationMatrix(matrixSize, std::vector<double>(matrixSize, 0));
+	for (size_t row = 0; row < matrixSize; row++) {
+		for (size_t column = 0; column < matrixSize; column++) {
+			temporaryOperationMatrix[row][column] = double(matrix[row][column]);
+		}
+	}
+
+	for (size_t pivot = 0; pivot < matrixSize; pivot++) {
+		for (size_t row = pivot; row < matrixSize; row++) {
+			if (temporaryOperationMatrix[row][pivot] != 0) {
+				std::swap(temporaryOperationMatrix[pivot], temporaryOperationMatrix[row]);
+				std::swap(inverseMatrix[pivot], inverseMatrix[row]);
+				break;
+			}
+		}
+
+		long double pivotValue = temporaryOperationMatrix[pivot][pivot];
+		if (pivotValue == 0) {
+			std::cout << "The matrix is not invertible. Inverse matrix calculation stopped." << std::endl;
+			return std::vector<std::vector<long double>>(0, std::vector<long double>(0, 0));
+		}
+
+		for (size_t column = 0; column < matrixSize; column++) {
+			temporaryOperationMatrix[pivot][column] /= pivotValue;
+			inverseMatrix[pivot][column] /= pivotValue;
+		}
+
+		for (size_t row = 0; row < matrixSize; row++) {
+			if (row != pivot) {
+				long double factor = temporaryOperationMatrix[row][pivot];
+				for (size_t column = 0; column < matrixSize; column++) {
+					temporaryOperationMatrix[row][column] -= (factor * temporaryOperationMatrix[pivot][column]);
+					inverseMatrix[row][column] -= (factor * inverseMatrix[pivot][column]);
+				}
+			}
+		}
+	}
+
+	return inverseMatrix;
+}
+
+template <typename TResult, typename TParameter>
+TResult HillCipher::modulus(const TResult& dividend, const TParameter& divisor) const {
+    if constexpr (std::is_integral<TResult>::value) {
+        return (dividend % divisor + divisor) % divisor;
+    } else {
+        return std::fmod(std::fmod(dividend, divisor) + divisor, divisor);
+    }
 }

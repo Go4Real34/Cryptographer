@@ -25,6 +25,7 @@ class HillCipher : public Encryptor {
 		const int8_t englishAlphabetSize = 26;
 
 		std::vector<std::vector<int8_t>> keyMatrix;
+		std::vector<std::vector<long double>> inverseKeyMatrix;
 		
 		std::vector<std::vector<int8_t>> plainTextMatrix;
 		std::vector<std::vector<bool>> plainTextIsLowerMatrix;
@@ -32,6 +33,7 @@ class HillCipher : public Encryptor {
 		std::vector<size_t> spaceIndexes;
 
 		std::vector<std::vector<int8_t>> encryptedTextMatrix;
+		std::vector<std::vector<int8_t>> decryptedTextMatrix;
 		
 		std::vector<std::vector<int8_t>> generateKeyMatrix() const;
 		std::vector<std::vector<int8_t>> generatePlainTextMatrix() const;
@@ -42,5 +44,11 @@ class HillCipher : public Encryptor {
 		bool isKeyValid();
 		int64_t getDeterminantOfMatrix(std::vector<std::vector<int8_t>>& matrix) const;
 
-		std::vector<std::vector<int8_t>> multiplyMatrices(std::vector<std::vector<int8_t>>& matrix1, std::vector<std::vector<int8_t>>& matrix2) const;
+		template<typename TParameter, typename TResult>
+		std::vector<std::vector<TResult>> multiplyMatrices(std::vector<std::vector<TParameter>>& matrix1, std::vector<std::vector<int8_t>>& matrix2, const TResult& divisor) const;
+
+		std::vector<std::vector<long double>> calculateMatrixInverseWithGaussJordanElimination(std::vector<std::vector<int8_t>>& matrix) const;
+		
+		template <typename TResult, typename TParameter>
+		TResult modulus(const TResult& dividend, const TParameter& divisor) const;
 };
