@@ -6,7 +6,7 @@
 AffineCipher::AffineCipher(const std::string& PlainText, const long long& Alpha, const long long& Beta) {
 	this -> alpha = Alpha;
 	this -> inverseOfAlpha = 1;
-	
+
 	if (Alpha < 1) {
 		std::cout << "The alpha value " << Alpha << " is less than 1. Encryption stopped." << std::endl;
 		return;
@@ -69,7 +69,7 @@ std::string AffineCipher::encrypt() {
 		return "";
 	}
 	
-	if (this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize)) {
+	if (!(this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize))) {
 		std::cout << "The alpha value " << this -> alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
 		return "";
 	}
@@ -95,7 +95,7 @@ std::string AffineCipher::decrypt() {
 		return "";
 	}
 
-	if (this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize)) {
+	if (!(this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize))) {
 		std::cout << "The alpha value " << this -> alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
 		return "";
 	}
