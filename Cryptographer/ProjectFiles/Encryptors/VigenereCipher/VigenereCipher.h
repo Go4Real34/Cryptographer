@@ -4,11 +4,11 @@
 
 class VigenereCipher : public Encryptor {
 	public:
-		VigenereCipher(const std::string& PlainText, const std::string& Key);
+		VigenereCipher(const std::string& PlainText, std::string& Key);
 		~VigenereCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
-		void setKey(const std::string& newKey);
+		void setPlainText(const std::string& newPlainText);
+		void setKey(std::string& newKey);
 
 		std::string encrypt() override;
 		std::string decrypt() override;

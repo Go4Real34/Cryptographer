@@ -2,9 +2,21 @@
 
 #include "VigenereCipher.h"
 
-VigenereCipher::VigenereCipher(const std::string& PlainText, const std::string& Key) {
+VigenereCipher::VigenereCipher(const std::string& PlainText, std::string& Key) {
 	this -> plainText = PlainText;
 	this -> textSize = PlainText.size();
+
+	if (Key.find(' ') != std::string::npos) {
+		std::cout << "The encryption key contains spaces. Encryption stopped." << std::endl;
+		
+		this -> key = "";
+		this -> keySize = 0;
+		
+		this -> equalizedKey = "";
+		this -> equalizedKeySize = 0;
+		
+		return;
+	}
 
 	this -> key = Key;
 	this -> keySize = Key.size();
@@ -27,7 +39,19 @@ void VigenereCipher::setPlainText(const std::string& newPlainText) {
 	this -> decryptedText = this -> decrypt();
 }
 
-void VigenereCipher::setKey(const std::string& newKey) {
+void VigenereCipher::setKey(std::string& newKey) {
+	if (newKey.find(' ') != std::string::npos) {
+		std::cout << "The encryption key contains spaces. Encryption stopped." << std::endl;
+		
+		this -> key = "";
+		this -> keySize = 0;
+
+		this -> equalizedKey = "";
+		this -> equalizedKeySize = 0;
+		
+		return;
+	}
+
 	this -> key = newKey;
 	this -> keySize = newKey.size();
 
@@ -39,10 +63,15 @@ void VigenereCipher::setKey(const std::string& newKey) {
 }
 
 std::string VigenereCipher::encrypt() {
+	if (this -> keySize == 0) {
+		std::cout << "The encryption key is empty. Encryption stopped." << std::endl;
+		return "";
+	}
+
 	std::string encryptedText = "";
 	for (size_t i = 0; i < this -> textSize; i++) {
-		char& currentCharacter = this -> plainText[i];
-		char& currentKeyCharacter = this -> equalizedKey[i];
+		const char currentCharacter = this -> plainText[i];
+		const char currentKeyCharacter = this -> equalizedKey[i];
 
 		if (currentCharacter == ' ') {
 			encryptedText += currentCharacter;
@@ -57,10 +86,15 @@ std::string VigenereCipher::encrypt() {
 }
 
 std::string VigenereCipher::decrypt() {
+	if (this -> keySize == 0) {
+		std::cout << "The encryption key is empty. Decryption stopped." << std::endl;
+		return "";
+	}
+
 	std::string decryptedText = "";
 	for (size_t i = 0; i < this -> encryptedText.size(); i++) {
-		char& currentCharacter = this -> encryptedText[i];
-		char& currentKeyCharacter = this -> equalizedKey[i];
+		const char currentCharacter = this -> encryptedText[i];
+		const char currentKeyCharacter = this -> equalizedKey[i];
 		
 		if (currentCharacter == ' ') {
 			decryptedText += currentCharacter;

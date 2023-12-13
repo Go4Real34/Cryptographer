@@ -7,7 +7,7 @@ class CaesarCipher : public Encryptor {
 		CaesarCipher(const std::string& PlainText, const long long& ShiftAmount);
 		~CaesarCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
+		void setPlainText(const std::string& newPlainText);
 		void setShiftAmount(int8_t newShiftAmount);
 
 		std::string encrypt() override;
@@ -15,7 +15,7 @@ class CaesarCipher : public Encryptor {
 
 	private:
 		int8_t shiftAmount = 0;
-		int8_t englishAlphabetSize = 26;
+		const int8_t englishAlphabetSize = 26;
 
 		const int8_t ASCII_CODE_OF_UPPERCASE_A = 65;
 		const int8_t ASCII_CODE_OF_UPPERCASE_Z = 90;

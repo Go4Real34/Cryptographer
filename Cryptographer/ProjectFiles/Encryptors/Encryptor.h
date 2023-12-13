@@ -12,8 +12,6 @@ class Encryptor {
 		std::string getEncryptedText() const;
 		std::string getDecryptedText() const;
 
-		virtual void setPlainText(const std::string& newPlainText) = 0;
-
 		virtual std::string encrypt() = 0;
 		virtual std::string decrypt() = 0;
 
@@ -23,7 +21,4 @@ class Encryptor {
 
 		std::string encryptedText = "";
 		std::string decryptedText = "";
-
-		virtual char encryptCharacter(const char& character) const;
-		virtual char decryptCharacter(const char& character) const;
 };

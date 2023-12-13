@@ -7,7 +7,7 @@ class AffineCipher : public Encryptor {
 		AffineCipher(const std::string& PlainText, const long long& Alpha, const long long& Beta);
 		~AffineCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
+		void setPlainText(const std::string& newPlainText);
 		void setAlpha(const long long& newAlpha);
 		void setBeta(const long long& newBeta);
 
@@ -20,7 +20,7 @@ class AffineCipher : public Encryptor {
 
 		long long inverseOfAlpha = 1;
 
-		int8_t englishAlphabetSize = 26;
+		const int8_t englishAlphabetSize = 26;
 
 		const int8_t ASCII_CODE_OF_UPPERCASE_A = 65;
 		const int8_t ASCII_CODE_OF_LOWERCASE_A = 97;
