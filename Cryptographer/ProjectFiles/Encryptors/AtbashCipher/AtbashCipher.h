@@ -7,7 +7,7 @@ class AtbashCipher : public Encryptor {
 		AtbashCipher(const std::string& PlainText);
 		~AtbashCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
+		void setPlainText(const std::string& newPlainText);
 
 		std::string encrypt() override;
 		std::string decrypt() override;

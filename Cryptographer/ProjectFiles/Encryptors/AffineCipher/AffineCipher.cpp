@@ -4,20 +4,27 @@
 #include "AffineCipher.h"
 
 AffineCipher::AffineCipher(const std::string& PlainText, const long long& Alpha, const long long& Beta) {
+	this -> alpha = Alpha;
+	this -> inverseOfAlpha = 1;
+	
 	if (Alpha < 1) {
 		std::cout << "The alpha value " << Alpha << " is less than 1. Encryption stopped." << std::endl;
-	} else if (this -> areNumbersCoprime(Alpha, this -> englishAlphabetSize)) {
-		this -> plainText = PlainText;
-		this -> textSize = PlainText.size();
-
-		this -> alpha = Alpha;
-		this -> beta = this -> modulus(Beta, this -> englishAlphabetSize);
-
-		this -> encryptedText = this -> encrypt();
-		this -> decryptedText = this -> decrypt();
-	} else {
-		std::cout << "The alpha value " << Alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return;
 	}
+	
+	if (!(this -> areNumbersCoprime(Alpha, this -> englishAlphabetSize))) {
+		std::cout << "The alpha value " << Alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return;
+	}
+
+	this -> plainText = PlainText;
+	this -> textSize = PlainText.size();
+
+	this -> alpha = Alpha;
+	this -> beta = this -> modulus(Beta, this -> englishAlphabetSize);
+
+	this -> encryptedText = this -> encrypt();
+	this -> decryptedText = this -> decrypt();
 }
 
 AffineCipher::~AffineCipher() {
@@ -32,16 +39,21 @@ void AffineCipher::setPlainText(const std::string& newPlainText) {
 }
 
 void AffineCipher::setAlpha(const long long& newAlpha) {
+	this -> alpha = newAlpha;
+	this -> inverseOfAlpha = 1;
+
 	if (newAlpha < 1) {
 		std::cout << "The alpha value " << newAlpha << " is less than 1. Encryption stopped." << std::endl;
-	} else if (this -> areNumbersCoprime(newAlpha, this -> englishAlphabetSize)) {
-		this -> alpha = newAlpha;
-
-		this -> encryptedText = this -> encrypt();
-		this -> decryptedText = this -> decrypt();
-	} else {
-		std::cout << "The alpha value " << newAlpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return;
 	}
+	
+	if (!(this -> areNumbersCoprime(newAlpha, this -> englishAlphabetSize))) {
+		std::cout << "The alpha value " << newAlpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return;
+	}
+
+	this -> encryptedText = this -> encrypt();
+	this -> decryptedText = this -> decrypt();
 }
 
 void AffineCipher::setBeta(const long long& newBeta) {
@@ -52,6 +64,16 @@ void AffineCipher::setBeta(const long long& newBeta) {
 }
 
 std::string AffineCipher::encrypt() {
+	if (this -> alpha < 1) {
+		std::cout << "The alpha value " << this -> alpha << " is less than 1. Encryption stopped." << std::endl;
+		return "";
+	}
+	
+	if (this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize)) {
+		std::cout << "The alpha value " << this -> alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return "";
+	}
+
 	std::string encryptedText = "";
 
 	for (const char& character : this -> plainText) {
@@ -68,6 +90,16 @@ std::string AffineCipher::encrypt() {
 }
 
 std::string AffineCipher::decrypt() {
+	if (this -> alpha < 1) {
+		std::cout << "The alpha value " << this -> alpha << " is less than 1. Encryption stopped." << std::endl;
+		return "";
+	}
+
+	if (this -> areNumbersCoprime(this -> alpha, this -> englishAlphabetSize)) {
+		std::cout << "The alpha value " << this -> alpha << " is not coprime with the alphabet size. Encryption stopped." << std::endl;
+		return "";
+	}
+
 	this -> inverseOfAlpha = this -> calculateInverseOfAlpha(this -> alpha, this -> englishAlphabetSize);
 	
 	std::string decryptedText = "";

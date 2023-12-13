@@ -7,7 +7,7 @@ class AffineCipher : public Encryptor {
 		AffineCipher(const std::string& PlainText, const long long& Alpha, const long long& Beta);
 		~AffineCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
+		void setPlainText(const std::string& newPlainText);
 		void setAlpha(const long long& newAlpha);
 		void setBeta(const long long& newBeta);
 

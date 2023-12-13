@@ -2,30 +2,69 @@
 
 #include "HillCipher.h"
 
-HillCipher::HillCipher(const std::string& PlainText, const std::string& Key) {
+
+HillCipher::HillCipher(std::string& PlainText, const std::string& Key) {
+	for (size_t index = 0; index < PlainText.size(); index++) {
+		if (PlainText[index] == ' ') {
+			this -> spaceIndexes.push_back(index);
+		}
+	}
+	PlainText.erase(std::remove(PlainText.begin(), PlainText.end(), ' '), PlainText.end());
 	this -> plainText = PlainText;
 	this -> textSize = PlainText.size();
 	
+	if (Key.find(' ') != std::string::npos) {
+		std::cout << "The encryption key contains spaces. Encryption stopped." << std::endl;
+		
+		this -> key = "";
+		this -> keySize = 0;
+		
+		this -> keyMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextIsLowerMatrix = std::vector<std::vector<bool>>(0, std::vector<bool>(0, false));
+
+		return;
+	}
+
 	this -> key = Key;
 	this -> keySize = Key.size();
 	
 	this -> keyMatrix = generateKeyMatrix();
 	
-	if (this -> isKeyValid()) {
-		this -> plainTextMatrix = generatePlainTextMatrix();
-		this -> plainTextIsLowerMatrix = generatePlainTextIsLowerMatrix();
-
-		this -> encryptedText = encrypt();
-		this -> decryptedText = decrypt();
-	} else {
+	if (!(this -> isKeyValid())) {
 		std::cout << "The encryption key is not able to create a matrix that is invertible so, it is not valid. Encryption stopped." << std::endl;
+
+		this -> key = "";
+		this -> keySize = 0;
+		
+		this -> keyMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		
+		this -> plainTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextIsLowerMatrix = std::vector<std::vector<bool>>(0, std::vector<bool>(0, false));
+
+		this -> encryptedTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+
+		return;
 	}
+	
+	this -> plainTextMatrix = generatePlainTextMatrix();
+	this -> plainTextIsLowerMatrix = generatePlainTextIsLowerMatrix();
+
+	this -> encryptedText = encrypt();
+	this -> decryptedText = decrypt();
 }
 
 HillCipher::~HillCipher() {
 }
 
-void HillCipher::setPlainText(const std::string& newPlainText) {
+void HillCipher::setPlainText(std::string& newPlainText) {
+	this -> spaceIndexes.clear();
+	for (size_t index = 0; index < newPlainText.size(); index++) {
+		if (newPlainText[index] == ' ') {
+			this -> spaceIndexes.push_back(index);
+		}
+	}
+	newPlainText.erase(std::remove(newPlainText.begin(), newPlainText.end(), ' '), newPlainText.end());
 	this -> plainText = newPlainText;
 	this -> textSize = newPlainText.size();
 
@@ -36,22 +75,89 @@ void HillCipher::setPlainText(const std::string& newPlainText) {
 	this -> decryptedText = decrypt();
 }
 
-void HillCipher::setKey(const std::string& newKey) {
+void HillCipher::setKey(std::string& newKey) {
+	if (newKey.find(' ') == std::string::npos) {
+		std::cout << "The encryption key contains spaces. Encryption stopped." << std::endl;
+
+		this -> key = "";
+		this -> keySize = 0;
+		
+		this -> keyMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		
+		this -> plainTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextIsLowerMatrix = std::vector<std::vector<bool>>(0, std::vector<bool>(0, false));
+		
+		this -> encryptedTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		
+		return;
+	}
+
 	this -> key = newKey;
 	this -> keySize = newKey.size();
 
 	this -> keyMatrix = generateKeyMatrix();
 
-	if (this -> isKeyValid()) {
-		this -> encryptedText = encrypt();
-		this -> decryptedText = decrypt();
-	} else {
+	if (!(this -> isKeyValid())) {
 		std::cout << "The encryption key is not able to create a matrix that is invertible so, it is not valid. Encryption stopped." << std::endl;
+
+		this -> key = "";
+		this -> keySize = 0;
+
+		this -> keyMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextMatrix = std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+		this -> plainTextIsLowerMatrix = std::vector<std::vector<bool>>(0, std::vector<bool>(0, false));
+
+		return;
 	}
+
+	this -> encryptedText = encrypt();
+	this -> decryptedText = decrypt();
+}
+
+std::string HillCipher::encrypt() {
+	if (this -> keySize == 0) {
+		std::cout << "The encryption key is empty. Encryption stopped." << std::endl;
+		return "";
+	}
+
+	this -> encryptedTextMatrix = multiplyMatrices(this -> keyMatrix, this -> plainTextMatrix);
+	const size_t encryptedTextMatrixRowSize = this -> encryptedTextMatrix.size();
+	const size_t encryptedTextMatrixColumnSize = this -> encryptedTextMatrix[0].size();
+	std::string matrixText = "";
+
+	for (size_t column = 0; column < encryptedTextMatrixColumnSize; column++) {
+		for (size_t row = 0; row < encryptedTextMatrixRowSize; row++) {
+			const int8_t numericalValueOfCharacter = this -> encryptedTextMatrix[row][column];
+			const bool isCharacterLower = this -> plainTextIsLowerMatrix[row][column];
+			
+			const int8_t asciiCodeOfCharacter = numericalValueOfCharacter + (isCharacterLower ? this -> ASCII_CODE_OF_LOWERCASE_A : this -> ASCII_CODE_OF_UPPERCASE_A);
+			const char character = char(asciiCodeOfCharacter);
+			matrixText += character;
+		}
+	}
+
+	std::string encryptedText = "";
+	int64_t spaceCount = 0;
+	for (size_t matrixTextIndex = 0, spaceIndex = 0; matrixTextIndex < matrixText.size() + this -> spaceIndexes.size(); matrixTextIndex++) {
+		if (spaceIndex < this -> spaceIndexes.size() && matrixTextIndex == this -> spaceIndexes[spaceIndex] + spaceCount) {
+			encryptedText += ' ';
+			spaceCount++;
+			spaceIndex++;
+		} else {
+			encryptedText += matrixText[matrixTextIndex - spaceCount];
+		}
+	}
+
+	return encryptedText;
 }
 
 
 std::vector<std::vector<int8_t>> HillCipher::generateKeyMatrix() const {
+	if (this -> keySize == 0) {
+		std::cout << "The encryption key is empty. Matrix generation stopped." << std::endl;
+		return std::vector<std::vector<int8_t>>(0, std::vector<int8_t>(0, 0));
+	}
+
 	const int64_t matrixSize = this -> getNearestSquareNumberOfKeyLength();
 	
 	int8_t temporaryNumericValueForOverflow = 0;
@@ -153,4 +259,23 @@ int64_t HillCipher::getDeterminantOfMatrix(std::vector<std::vector<int8_t>>& mat
     }
 
     return determinant;
+}
+
+std::vector<std::vector<int8_t>> HillCipher::multiplyMatrices(std::vector<std::vector<int8_t>>& matrix1, std::vector<std::vector<int8_t>>& matrix2) const {
+	const size_t matrix1RowCount = matrix1.size();
+	const size_t matrix1ColumnCount = matrix1[0].size();
+	const size_t matrix2ColumnCount = matrix2[0].size();
+
+	std::vector<std::vector<int8_t>> resultMatrix(matrix1RowCount, std::vector<int8_t>(matrix2ColumnCount, 0));
+
+	for (size_t firstMatrixRow = 0; firstMatrixRow < matrix1RowCount; firstMatrixRow++) {
+		for (size_t secondMatrixColumn = 0; secondMatrixColumn < matrix2ColumnCount; secondMatrixColumn++) {
+			for (size_t firstMatrixColumn = 0; firstMatrixColumn < matrix1ColumnCount; firstMatrixColumn++) {
+				resultMatrix[firstMatrixRow][secondMatrixColumn] += (matrix1[firstMatrixRow][firstMatrixColumn] * matrix2[firstMatrixColumn][secondMatrixColumn]) % this -> englishAlphabetSize;
+			}
+			resultMatrix[firstMatrixRow][secondMatrixColumn] %= this -> englishAlphabetSize;
+		}
+	}
+
+	return resultMatrix;
 }

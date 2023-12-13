@@ -6,11 +6,11 @@
 
 class HillCipher : public Encryptor {
 	public:
-		HillCipher(const std::string& PlainText, const std::string& Key);
+		HillCipher(std::string& PlainText, const std::string& Key);
 		~HillCipher();
 
-		void setPlainText(const std::string& newPlainText) override;
-		void setKey(const std::string& newKey);
+		void setPlainText(std::string& newPlainText);
+		void setKey(std::string& newKey);
 
 		std::string encrypt() override;
 		std::string decrypt() override;
@@ -28,6 +28,10 @@ class HillCipher : public Encryptor {
 		
 		std::vector<std::vector<int8_t>> plainTextMatrix;
 		std::vector<std::vector<bool>> plainTextIsLowerMatrix;
+
+		std::vector<size_t> spaceIndexes;
+
+		std::vector<std::vector<int8_t>> encryptedTextMatrix;
 		
 		std::vector<std::vector<int8_t>> generateKeyMatrix() const;
 		std::vector<std::vector<int8_t>> generatePlainTextMatrix() const;
@@ -37,4 +41,6 @@ class HillCipher : public Encryptor {
 
 		bool isKeyValid();
 		int64_t getDeterminantOfMatrix(std::vector<std::vector<int8_t>>& matrix) const;
+
+		std::vector<std::vector<int8_t>> multiplyMatrices(std::vector<std::vector<int8_t>>& matrix1, std::vector<std::vector<int8_t>>& matrix2) const;
 };
