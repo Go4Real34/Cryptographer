@@ -15,7 +15,7 @@ class CaesarCipher : public Encryptor {
 
 	private:
 		int8_t shiftAmount = 0;
-		int8_t englishAlphabetSize = 26;
+		const int8_t englishAlphabetSize = 26;
 
 		const int8_t ASCII_CODE_OF_UPPERCASE_A = 65;
 		const int8_t ASCII_CODE_OF_UPPERCASE_Z = 90;

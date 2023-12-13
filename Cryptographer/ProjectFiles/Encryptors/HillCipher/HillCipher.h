@@ -19,6 +19,9 @@ class HillCipher : public Encryptor {
 		std::string key = "";
 		size_t keySize = 0;
 
+		const int8_t ASCII_CODE_OF_UPPERCASE_A = 65;
+		const int8_t ASCII_CODE_OF_LOWERCASE_A = 97;
+
 		const int8_t englishAlphabetSize = 26;
 
 		std::vector<std::vector<int8_t>> keyMatrix;
@@ -32,6 +35,6 @@ class HillCipher : public Encryptor {
 
 		int64_t getNearestSquareNumberOfKeyLength() const;
 
-		bool isKeyValid() const;
-		int64_t getDeterminantOfMatrix(std::vector<std::vector<int64_t>>& matrix) const;
+		bool isKeyValid();
+		int64_t getDeterminantOfMatrix(std::vector<std::vector<int8_t>>& matrix) const;
 };

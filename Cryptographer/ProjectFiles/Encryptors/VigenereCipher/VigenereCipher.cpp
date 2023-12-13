@@ -41,8 +41,8 @@ void VigenereCipher::setKey(const std::string& newKey) {
 std::string VigenereCipher::encrypt() {
 	std::string encryptedText = "";
 	for (size_t i = 0; i < this -> textSize; i++) {
-		char& currentCharacter = this -> plainText[i];
-		char& currentKeyCharacter = this -> equalizedKey[i];
+		const char currentCharacter = this -> plainText[i];
+		const char currentKeyCharacter = this -> equalizedKey[i];
 
 		if (currentCharacter == ' ') {
 			encryptedText += currentCharacter;
@@ -59,8 +59,8 @@ std::string VigenereCipher::encrypt() {
 std::string VigenereCipher::decrypt() {
 	std::string decryptedText = "";
 	for (size_t i = 0; i < this -> encryptedText.size(); i++) {
-		char& currentCharacter = this -> encryptedText[i];
-		char& currentKeyCharacter = this -> equalizedKey[i];
+		const char currentCharacter = this -> encryptedText[i];
+		const char currentKeyCharacter = this -> equalizedKey[i];
 		
 		if (currentCharacter == ' ') {
 			decryptedText += currentCharacter;
